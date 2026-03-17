@@ -1,0 +1,43 @@
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Logs
+logs/
+*.log
+
+# IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Compiled class files
+*.class
+
+# Package files
+*.jar
+*.war
+*.ear
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Spring Boot
+application-local.properties
+
+# Upload folder
+uploads/
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+
+# Node (if frontend added later)
+node_modules/
+
+# Database files
+*.db

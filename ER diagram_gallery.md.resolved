@@ -1,0 +1,16 @@
+# RevShop Diagram Gallery
+
+This gallery provides a direct view of the professional diagrams generated for your project. You can save these images directly and use them in your PDF report.
+
+````carousel
+### ER Diagram
+![RevShop ER Diagram](file:///C:/Users/aravi/.gemini/antigravity/brain/99891972-4adb-47f8-a590-da32fe99edf3/revshop_er_diagram_1773094322627.png)
+<!-- slide -->
+### Class Diagram
+![RevShop Class Diagram](file:///C:/Users/aravi/.gemini/antigravity/brain/99891972-4adb-47f8-a590-da32fe99edf3/revshop_class_diagram_1773094352455.png)
+````
+
+## Image File Locations
+The high-resolution images are also saved in your project folder for easy access:
+1. **ER Diagram**: `c:\Users\aravi\Desktop\RevShop_P2 (2)\RevShop_P2\revshop_er_diagram.png`
+2. **Class Diagram**: `c:\Users\aravi\Desktop\RevShop_P2 (2)\RevShop_P2\revshop_class_diagram.png`

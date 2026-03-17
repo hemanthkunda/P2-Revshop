@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+</head>
+
+<body>
+    <header th:fragment="header"
+        class="navbar navbar-expand-lg navbar-dark bg-primary premium-header sticky-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-4" th:href="@{/}">
+                <i class="fa-solid fa-cart-shopping me-2"></i>RevShop
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Search Bar -->
+                <form class="d-flex mx-auto col-md-6" th:action="@{/products}" method="get">
+                    <input class="form-control rounded-start-pill border-0 shadow-none" type="search"
+                        placeholder="Search for products..." name="keyword">
+                    <button class="btn btn-light rounded-end-pill px-4 ms-0" type="submit"><i
+                            class="fa-solid fa-magnifying-glass"></i></button>
+                </form>
+
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+
+                    <li class="nav-item me-2" th:if="${session.user == null}">
+                        <a class="nav-link" th:href="@{/login}"><i class="fa-solid fa-user me-1"></i>Login /
+                            Register</a>
+                    </li>
+
+                    <!-- Generic Buyer Links -->
+                    <li class="nav-item me-2" th:if="${session.user != null and session.user.role.name() == 'BUYER'}">
+                        <a class="nav-link" th:href="@{/cart}">
+                            <i class="fa-solid fa-cart-shopping fs-5"></i>
+                            <span class="badge rounded-pill bg-warning text-dark position-absolute mt-1 ms-n1"
+                                style="font-size: 0.6em;" th:text="${cartCount}">0</span>
+                        </a>
+                    </li>
+
+                    <!-- Notification Bell Dropdown (Buyer & Seller) -->
+                    <li class="nav-item dropdown me-2" th:if="${session.user != null}">
+                        <a class="nav-link dropdown-toggle position-relative px-2 mx-1" href="#"
+                            id="notificationDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fa-solid fa-bell fs-5"></i>
+                            <span th:if="${unreadNotificationCount > 0}"
+                                class="badge rounded-pill bg-danger text-white position-absolute top-0 start-100 translate-middle-y"
+                                style="font-size: 0.6em; margin-top: 8px; margin-left: -5px;"
+                                th:text="${unreadNotificationCount}"></span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 py-0"
+                            style="width: 320px; max-height: 480px; overflow-y: auto;">
+                            <li class="p-3 border-bottom bg-light rounded-top">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-0 fw-bold text-dark">Notifications</h6>
+                                    <span th:if="${unreadNotificationCount > 0}" class="badge bg-primary rounded-pill"
+                                        th:text="${unreadNotificationCount} + ' New'"></span>
+                                </div>
+                            </li>
+                            <li th:if="${latestNotifications == null or latestNotifications.isEmpty()}"
+                                class="p-4 text-center">
+                                <i class="fa-solid fa-bell-slash text-secondary opacity-50 mb-2 fs-4"></i>
+                                <p class="dropdown-item-text text-muted mb-0">No recent notifications</p>
+                            </li>
+                            <li th:each="notif : ${latestNotifications}">
+                                <a class="dropdown-item px-3 py-2 border-bottom hover-bg-light"
+                                    th:href="@{/notifications/read/{id}(id=${notif.id})}"
+                                    th:classappend="${!notif.isRead} ? 'bg-white fw-bold' : 'text-secondary'">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="flex-shrink-0">
+                                            <div class="rounded-circle p-2"
+                                                th:classappend="${!notif.isRead} ? 'bg-primary-subtle' : 'bg-light'">
+                                                <i class="fa-solid fa-circle-info"
+                                                    th:classappend="${!notif.isRead} ? 'text-primary' : 'text-secondary'"></i>
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1 overflow-hidden">
+                                            <p class="mb-0 text-wrap small lh-sm" th:text="${notif.message}"></p>
+                                            <small class="text-muted" style="font-size: 0.75rem;"
+                                                th:text="${#temporals.format(notif.createdAt, 'MMM dd, HH:mm')}"></small>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="p-2">
+                                <a class="dropdown-item text-center text-primary fw-bold rounded small"
+                                    th:href="@{/notifications}">View All Notifications</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!-- Buyer Profile Dropdown -->
+                    <li class="nav-item dropdown"
+                        th:if="${session.user != null and session.user.role.name() == 'BUYER'}">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" id="buyerDropdown"
+                            role="button" data-bs-toggle="dropdown">
+                            <i class="fa-solid fa-circle-user fs-4 text-white-50"></i>
+                            <span>[[${session.user.name}]] (Buyer)</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                            <li><a class="dropdown-item py-2" th:href="@{/}"><i
+                                        class="fa-solid fa-house me-2 text-primary opacity-75"></i>Home</a></li>
+                            <li><a class="dropdown-item py-2" th:href="@{/orders}"><i
+                                        class="fa-solid fa-box-open me-2 text-primary opacity-75"></i>My Orders</a></li>
+                            <li><a class="dropdown-item py-2" th:href="@{/favorites}"><i
+                                        class="fa-solid fa-heart me-2 text-danger opacity-75"></i>Wishlist</a></li>
+                            <li><a class="dropdown-item py-2" th:href="@{/notifications}"><i
+                                        class="fa-solid fa-bell me-2 text-info opacity-75"></i>Notifications</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item py-2 text-danger" th:href="@{/logout}"><i
+                                        class="fa-solid fa-right-from-bracket me-2"></i>Logout</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Seller Links -->
+                    <li class="nav-item dropdown"
+                        th:if="${session.user != null and session.user.role.name() == 'SELLER'}">
+                        <a class="nav-link dropdown-toggle bg-white text-primary rounded-pill px-3 py-2 fw-bold shadow-sm d-flex align-items-center gap-2"
+                            href="#" id="sellerDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fa-solid fa-shop fs-5"></i>
+                            <span>[[${session.user.name}]] (Seller)</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 p-2" style="width: 220px;">
+                            <li>
+                                <h6 class="dropdown-header small text-uppercase fw-bold text-muted">Merchant Tools</h6>
+                            </li>
+                            <li><a class="dropdown-item rounded-2 py-2 mb-1" th:href="@{/seller/dashboard}">
+                                    <i class="fa-solid fa-chart-line me-2 text-success"></i>Dashboard</a></li>
+                            <li><a class="dropdown-item rounded-2 py-2 mb-1" th:href="@{/seller/inventory}">
+                                    <i class="fa-solid fa-boxes-stacked me-2 text-info"></i>Inventory</a></li>
+                            <li><a class="dropdown-item rounded-2 py-2 mb-1" th:href="@{/seller/orders}">
+                                    <i class="fa-solid fa-clipboard-list me-2 text-warning"></i>Manage Orders</a></li>
+                            <li><a class="dropdown-item rounded-2 py-2 mb-1" th:href="@{/notifications}">
+                                    <i class="fa-solid fa-bell me-2 text-primary"></i>Notifications</a></li>
+                            <li>
+                                <hr class="dropdown-divider my-2">
+                            </li>
+                            <li><a class="dropdown-item rounded-2 py-2 text-danger" th:href="@{/logout}">
+                                    <i class="fa-solid fa-right-from-bracket me-2"></i>Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+</body>
+
+</html>

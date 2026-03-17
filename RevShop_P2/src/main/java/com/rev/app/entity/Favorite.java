@@ -1,0 +1,35 @@
+package com.rev.app.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "favorites")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Favorite {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "favorite_seq")
+    @SequenceGenerator(name = "favorite_seq", sequenceName = "FAVORITE_SEQ", allocationSize = 1)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
+
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
+}

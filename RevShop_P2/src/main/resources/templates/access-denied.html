@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+    th:replace="~{fragments/base :: layout('Access Denied - RevShop', ~{::section})}">
+
+<head></head>
+
+<body>
+    <section class="error-wrapper my-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8 text-center">
+                    <div class="card glass-panel border-0 shadow-lg py-5 px-4">
+                        <div class="card-body">
+                            <div class="mb-4">
+                                <div class="display-1 text-danger mb-3">
+                                    <i class="fa-solid fa-shield-halved"></i>
+                                </div>
+                                <h1 class="fw-bold text-dark">Access Denied</h1>
+                                <p class="lead text-secondary mt-3" th:text="${errorMessage}">
+                                    You do not have permission to access this resource.
+                                </p>
+                            </div>
+
+                            <div class="alert alert-info border-0 bg-light p-4 mb-4">
+                                <div class="d-flex align-items-center">
+                                    <i class="fa-solid fa-circle-info fs-4 text-primary me-3"></i>
+                                    <div class="text-start">
+                                        <h6 class="fw-bold mb-1">Why am I seeing this?</h6>
+                                        <p class="small text-secondary mb-0">
+                                            This often happens when you have multiple accounts or roles open in
+                                            different tabs.
+                                            The browser session is shared across all tabs, which can cause conflicts.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-3 d-sm-flex justify-content-sm-center mt-4">
+                                <a th:href="@{/logout}"
+                                    class="btn btn-primary btn-lg px-5 py-3 rounded-pill fw-bold shadow-sm">
+                                    <i class="fa-solid fa-right-from-bracket me-2"></i>Switch Account
+                                </a>
+                                <a th:href="@{/}"
+                                    class="btn btn-outline-secondary btn-lg px-5 py-3 rounded-pill fw-bold">
+                                    <i class="fa-solid fa-house me-2"></i>Return Home
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
